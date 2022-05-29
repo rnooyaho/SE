@@ -45,6 +45,8 @@ void doTask()
     int menu_level_1 = 0, menu_level_2 = 0;
     int is_program_exit = 0;
 
+    vector<Product*> products; //등록된 전체 상품 리스트. 나중에 코드 수정하기. 
+
     while (!is_program_exit)
     {
         // 입력파일에서 메뉴 숫자 2개를 읽기
@@ -75,21 +77,24 @@ void doTask()
             {
 
             case 1: // "4.1. 상품 정보 검색" 메뉴 부분 
-            {
-                vector<Product*> products; //등록된 전체 상품 리스트. 나중에 코드 수정하기. 
+            {                
                 Search* search = new Search(fin,products,selected,fout);
+                break;
             }
             case 2: // "4.2. 상품 구매" 메뉴 부분
             {
                 Purchase* purchase = new Purchase(selected,actor,fout);
+                break;
             }
             case 3: // "4.3. 상품 구매 내역 조회" 메뉴 부분 
             {
                 ShowShopping* showShopping = new ShowShopping(actor, fout);
+                break;
             }
             case 4: // "4.4. 상품 구매만족도 평가" 메뉴 부분 
             {
                 SatisfactionScore* satisfactionScore = new SatisfactionScore(fin, actor, fout);
+                break;
             }
             }
         }
