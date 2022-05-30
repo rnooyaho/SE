@@ -18,9 +18,13 @@ string Product::getProductName()
 {
 	return productName;
 }
-void Product::getProductDetails(ofstream& fout)
+void Product::getProductDetails(string& ID, string& name, string& companyName, int& productCost, int& left)
 {
-	fout << "> " << sellerID << " " << productName << " " << productCompanyName << " " << cost << " " << quantityLeft << "\n";
+	ID = sellerID;
+	name = productName;
+	companyName = productCompanyName;
+	productCost = this->cost;
+	left = this->quantityLeft;
 }
 void Product::stockCorrection() //재고 및 판매량 수정
 {

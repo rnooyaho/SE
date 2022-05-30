@@ -2,10 +2,15 @@
 
 5.30
 4.1 ~ 4.4만 input 파일에 넣어서 잘 돌아가는지 확인했어용
-어제 코드는 생성자에 모든 걸 때려박았더니 너무 불안정해서 싹 고쳤습니다 ㅜㅜ
-등록된 product받아오는 부분, actor받아오는 부분 등은 나중에 다른 팀원 분들 코드 따라서 수정할게요
+등록된 product받아오는 부분 등은 나중에 다른 팀원 분들이 하신 거 보고 수정할게요
+다른 부분 수정은 화요일 회의 이후에 하겠습니다.
 
-**
+5.30. (2)
+파일 입출력이 boundary class에서만 일어나도록 수정했습니다. 
+돌아가는 것도 확인했슴다ㅎㅎ
+
+*memo*
+* 다이어그램 수정하기
 4.4. 구매만족도 커뮤니케이션 다이어그램 수정해야됨
 ************************************/
 #pragma once
@@ -88,7 +93,7 @@ void doTask()
             switch (menu_level_2)
             {
 
-            case 1: // "4.1. 상품 정보 검색" 메뉴 부분 
+            case 1: // "4.1. 상품 정보 검색" 메뉴 부분 input : 4 1 hat
             {
                 //cout << "4.1." << endl;
                 Search* search = new Search;
@@ -97,7 +102,7 @@ void doTask()
                 fout << "\n";
                 break;
             }
-            case 2: // "4.2. 상품 구매" 메뉴 부분
+            case 2: // "4.2. 상품 구매" 메뉴 부분 
             {
                 //cout << "4.2." << endl;
                 Purchase* purchase = new Purchase;
@@ -110,9 +115,10 @@ void doTask()
                 //cout << "4.3." << endl;
                 ShowShopping* showShopping = new ShowShopping;
                 showShopping->run(actor, fout);
+                fout << "\n";
                 break;
             }
-            case 4: // "4.4. 상품 구매만족도 평가" 메뉴 부분 
+            case 4: // "4.4. 상품 구매만족도 평가" 메뉴 부분 input : 4 4 hat 3
             {
                 //cout << "4.4." << endl;
                 SatisfactionScore* satisfactionScore = new SatisfactionScore;

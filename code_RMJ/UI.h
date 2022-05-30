@@ -20,24 +20,25 @@ class SearchUI{
 	string productName;
 	Product* selected; //추가한 부분
 public:
-	void startInterface(ifstream& fin);
+	void startInterface(ifstream& fin, ofstream& fout);
 	void enterProductName(Search* search, ProductCollection products, ofstream& fout); //searchProductName으로 바꾸는 게 나을수도..
 	Product* selectPurchase();
 };
 class ShowShoppingListUI {
 public:
-	void startInterface(ofstream& fout);
+	void startInterface(ProductCollection list, ofstream& fout);
 	//void selectProductSatisfaction();
 };
 class SatisfactionScoreUI {
 public:
-	void startInterface(ifstream& fin, string& productName, int& score);
+	void startInterface(ifstream& fin, string& productName, int& score, ofstream& fout);
+	void printScore(string sellerID, string productName, int score, ofstream& fout);
 	//void enterScore();
 };
 class PurchaseUI {
 	Purchase* purchase;
 public:
-	void startInterface(Purchase* purchase);
+	void startInterface(Product* product, Purchaser* actor, ofstream& fout, Purchase* purchase);
 	void purchaseProduct();
 };
 
@@ -46,7 +47,7 @@ class Search {
 	SearchUI* searchUI;
 public:
 	Product* run(ifstream& fin, ProductCollection products, Product*& selected, ofstream& fout);
-	Product* searchProduct(string productName, ProductCollection products, ofstream& fout);
+	Product* searchProduct(string productName, ProductCollection products);
 };
 class Purchase {
 	Product* product;
