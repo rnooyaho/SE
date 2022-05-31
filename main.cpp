@@ -55,7 +55,9 @@ void doTask()
     int menu_level_1 = 0, menu_level_2 = 0;
     int is_program_exit = 0;
 
-    ClientCollection clients;
+    ClientCollection Allclients;
+
+
 
     while (!is_program_exit)
     {
@@ -74,19 +76,21 @@ void doTask()
             case 1:   // "1.1. 회원가입“ 메뉴 부분
             {
                 CreateClientAccount* client = new CreateClientAccount;
-                client->addNewClient(fin, clients, fout);
-
-                //cout << clients.clients[0]->getClientPW();
+                client->addNewClient(fin, Allclients, fout);
+                
+                Allclients.printClient(); // 회원수 출력
                 break;
             }
             case 2:
             {
                 DeleteClientAccount *dclient = new DeleteClientAccount;
-                dclient->deleteClient(fin, clients, fout);
+                dclient->deleteClient(fin, Allclients, fout);
 
+                Allclients.printClient(); // 회원수 출력
                 break;
             }
             }
+            break;
         }
         case 2:
         {
@@ -97,14 +101,14 @@ void doTask()
             case 1: 
             {
                 Login* log = new Login;
-                log->tryLogin(fin, clients, fout); //로그인
+                log->tryLogin(fin, Allclients, fout); //로그인
 
-
+                break;
             }
             case 2:
             {
                 Logout* log_out = new Logout;
-                log_out->tryLogout(clients, fout); //로그아웃
+                log_out->tryLogout(Allclients, fout); //로그아웃
                 break;
             }
             }
@@ -118,6 +122,7 @@ void doTask()
             {
                 program_exit();
                 is_program_exit = 1;
+                cout << "종료";
                 //break;
                 return;
             }
