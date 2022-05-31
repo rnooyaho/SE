@@ -2,12 +2,12 @@
 #include <iostream>
 #include "entity.h"
 
-//구매자 클래스 멤버함수 구현
-void Purchaser::addPurchaseInformation(Product* product) //구매 상품 리스트 추가
+//Client 클래스 멤버함수(구매자 부분) 구현
+void Client::addPurchaseInformation(Product* product) //구매 상품 리스트 추가
 {
 	purchasedProductList.addProduct(product);
 }
-ProductCollection Purchaser::getPurchasedProductList()
+ProductCollection Client::getPurchasedProductList()
 {
 	return purchasedProductList;
 }
@@ -18,13 +18,14 @@ string Product::getProductName()
 {
 	return productName;
 }
-void Product::getProductDetails(string& ID, string& name, string& companyName, int& productCost, int& left)
+void Product::getProductDetails(string& ID, string& name, string& companyName, int& productCost, int& left, float& score)
 {
 	ID = sellerID;
 	name = productName;
 	companyName = productCompanyName;
 	productCost = this->cost;
 	left = this->quantityLeft;
+	score = this->averageScore;
 }
 void Product::stockCorrection() //재고 및 판매량 수정
 {
@@ -46,7 +47,7 @@ string Product::getSellerID()
 }
 
 
-//collection class 멤버 함수 구현
+//product collection class 멤버 함수 구현
 Product* ProductCollection::findProduct(string productName)//상품 정보 검색에 이용
 {
 	int i = 0;
@@ -56,7 +57,7 @@ Product* ProductCollection::findProduct(string productName)//상품 정보 검색에 이
 		{
 			break;
 		}
-			
+
 	}
 	return products[i];
 }

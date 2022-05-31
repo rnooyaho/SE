@@ -7,32 +7,6 @@ using namespace std;
 class Client;
 class Product;
 class ProductCollection;
-class Purchaser; 
-
-class Client {
-private:
-	string clientName;
-	int socialSecurityNumber;
-	string clientID;
-	string clientPassword;
-
-public:
-	/*
-	Client() { // 4번대 잘 돌아가는지 보려고 만든 생성자. 
-		clientName = "part";
-		socialSecurityNumber = 123456;
-		clientID = "obs";
-		clientPassword = "pw2d";
-
-	}
-	*/
-	void createCleint() {};
-	string getClient() { return clientID; };
-	void deleteClient() {};
-	string getClientID() { return clientID; }; //추가했는데 getClient랑 겹치면 필요x
-};
-
-
 
 class Product {
 private:
@@ -56,17 +30,17 @@ public:
 		averageScore = 0.0; //구매만족도 초기값은 0. 이것만 남겨두기. 
 	}
 	*/
-	void getProductDetails(string& ID, string& name, string& companyName, int& productCost, int& left);
+
+	void getProductDetails(string& ID, string& name, string& companyName, int& productCost, int& left, float& score);
 	string getProductName();//필요해서 추가함
 	string getName(); //새로 추가한 함수. Search에서 필요함.
 	string getSellerID();
 	void setScore(int score);
 	void stockCorrection();
-	void createProduct() {}; //
-	void getProductCostAndScore() {};//
+	void createProduct() {};
+	void getProductCostAndScore() {};
 
 };
-
 
 class ProductCollection {
 private:
@@ -78,10 +52,25 @@ public:
 	Product* getProduct(int i);
 };
 
-class Purchaser :public Client {
+class Client {
 private:
-	ProductCollection purchasedProductList;
+	string clientName;
+	string socialSecurityNumber;
+	string clientID;
+	string clientPassword;
+	ProductCollection purchasedProductList; //구매자에서 추가
+
 public:
-	void addPurchaseInformation(Product* product);
-	ProductCollection getPurchasedProductList();
+	/*
+	Client() { // 4번대 잘 돌아가는지 보려고 만든 생성자. 
+		clientName = "part";
+		socialSecurityNumber = "123456";
+		clientID = "obs";
+		clientPassword = "pw2d";
+	}
+	*/
+	void addPurchaseInformation(Product* product); //구매자에서 추가
+	ProductCollection getPurchasedProductList();   //구매자에서 추가
 };
+
+

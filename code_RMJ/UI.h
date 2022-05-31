@@ -16,7 +16,7 @@ class SatisfactionScore;
 class Purchase;
 
 //boundary class 선언
-class SearchUI{
+class SearchUI {
 	string productName;
 	Product* selected; //추가한 부분
 public:
@@ -38,7 +38,7 @@ public:
 class PurchaseUI {
 	Purchase* purchase;
 public:
-	void startInterface(Product* product, Purchaser* actor, ofstream& fout, Purchase* purchase);
+	void startInterface(Product* product, Client* actor, ofstream& fout, Purchase* purchase);
 	void purchaseProduct();
 };
 
@@ -52,24 +52,22 @@ public:
 class Purchase {
 	Product* product;
 	PurchaseUI* purchaseUI;
-	Purchaser* actor;
+	Client* actor;
 public:
-	Purchaser* run(Product* product, Purchaser* actor, ofstream& fout);
+	Client* run(Product* product, Client* actor, ofstream& fout);
 	void purchaseProduct();
 };
 class ShowShopping {
 public:
-	void run(Purchaser* actor, ofstream& fout);
+	void run(Client* actor, ofstream& fout);
 };
 
 class SatisfactionScore {
 public:
 
-	void run(ifstream& fin, Purchaser* actor, ofstream& fout);
+	void run(ifstream& fin, Client* actor, ofstream& fout);
 	//void enterScore();
 };
-
-
 
 
 

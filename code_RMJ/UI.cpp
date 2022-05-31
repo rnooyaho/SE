@@ -18,10 +18,11 @@ void SearchUI::enterProductName(Search* search, ProductCollection products, ofst
 	string companyName;
 	int productCost;
 	int quantityLeft;
+	float score;
 
 	this->selected = search->searchProduct(this->productName, products);
-	selected->getProductDetails(sellerID, name, companyName, productCost, quantityLeft);
-	fout << "> " << sellerID << " " << productName << " " << companyName << " " << productCost << " " << quantityLeft << "\n";
+	selected->getProductDetails(sellerID, name, companyName, productCost, quantityLeft, score);
+	fout << "> " << sellerID << " " << productName << " " << companyName << " " << productCost << " " << quantityLeft << " "<<score<<"\n";
 }
 Product* SearchUI::selectPurchase()
 {
@@ -30,7 +31,7 @@ Product* SearchUI::selectPurchase()
 
 Product* Search::run(ifstream& fin, ProductCollection products, Product*& selected, ofstream& fout) //상품 정보 검색 0.
 {
-	
+
 	searchUI = new SearchUI;
 	searchUI->startInterface(fin, fout); //상품명 입력 받음
 	searchUI->enterProductName(this, products, fout); //입력받은 상품 정보 출력 
@@ -52,7 +53,7 @@ Product* Search::searchProduct(string productName, ProductCollection products) /
 4.2. 상품 구매
 > mbc hat
 */
-void PurchaseUI::startInterface(Product* product, Purchaser* actor, ofstream& fout, Purchase* purchase) //4.1.
+void PurchaseUI::startInterface(Product* product, Client* actor, ofstream& fout, Purchase* purchase) //4.1.
 {
 	this->purchase = purchase;
 	purchaseProduct();
@@ -62,14 +63,14 @@ void PurchaseUI::purchaseProduct() //4.1.1.
 {
 	purchase->purchaseProduct();
 }
-Purchaser* Purchase::run(Product* product, Purchaser* actor, ofstream& fout)
+Client* Purchase::run(Product* product, Client* actor, ofstream& fout)
 {
 	fout << "4.2. 상품 구매\n";
 	this->product = product;
 	this->actor = actor;
 	purchaseUI = new PurchaseUI;
 	purchaseUI->startInterface(product, actor, fout, this); //4.1.
-	
+
 	return actor;
 }
 void Purchase::purchaseProduct()
@@ -84,10 +85,10 @@ void Purchase::purchaseProduct()
 4.3. 상품 구매 내역 조회
 > mbc hat chulsoo 2000 1
 */
-void ShowShopping::run(Purchaser* actor, ofstream& fout)
+void ShowShopping::run(Client* actor, ofstream& fout)
 {
 	ProductCollection list;
-	ShowShoppingListUI UI;	
+	ShowShoppingListUI UI;
 	list = actor->getPurchasedProductList(); //구매 내역 불러오기.
 
 	UI.startInterface(list, fout); //구매내역 interface로 전달. 
@@ -105,11 +106,12 @@ void ShowShoppingListUI::startInterface(ProductCollection list, ofstream& fout)
 	string companyName;
 	int productCost;
 	int quantityLeft;
+	float score;
 
 	for (int i = 0; i < list.getSize(); ++i)
 	{
-		list.getProduct(i)->getProductDetails(sellerID, productName, companyName, productCost, quantityLeft);
-		fout << "> " << sellerID << " " << productName << " " << companyName << " " << productCost << " " << quantityLeft << "\n";
+		list.getProduct(i)->getProductDetails(sellerID, productName, companyName, productCost, quantityLeft, score);
+		fout << "> " << sellerID << " " << productName << " " << companyName << " " << productCost << " " << quantityLeft << " "<<score<<"\n";
 	}
 }
 
@@ -124,11 +126,11 @@ void SatisfactionScoreUI::startInterface(ifstream& fin, string& productName, int
 	fout << "4.4. 상품 구매 만족도 평가\n";
 	fin >> productName >> score; //상품명과 구매 만족도 입력 받음
 }
-void SatisfactionScoreUI::printScore(string sellerID, string productName,int score, ofstream& fout)
+void SatisfactionScoreUI::printScore(string sellerID, string productName, int score, ofstream& fout)
 {
 	fout << "> " << sellerID << " " << productName << " " << score << "\n";
 }
-void SatisfactionScore::run(ifstream& fin, Purchaser* actor, ofstream& fout)
+void SatisfactionScore::run(ifstream& fin, Client* actor, ofstream& fout)
 {
 	string productName;
 	int score;

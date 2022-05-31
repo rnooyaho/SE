@@ -6,8 +6,11 @@
 다른 부분 수정은 화요일 회의 이후에 하겠습니다.
 
 5.30. (2)
-파일 입출력이 boundary class에서만 일어나도록 수정했습니다. 
+파일 입출력이 boundary class에서만 일어나도록 수정했습니다.
 돌아가는 것도 확인했슴다ㅎㅎ
+
+5.30. (3)
+Purchaser클래스를 Client 클래스로 합쳤습니다.
 
 *memo*
 * 다이어그램 수정하기
@@ -36,12 +39,12 @@ void program_exit();
 
 // 파일 입출력을 위한 파일 포인터 변수 선언.
 ifstream fin(INPUT_FILE_NAME);
-ofstream fout(OUTPUT_FILE_NAME); 
+ofstream fout(OUTPUT_FILE_NAME);
 //ofstream fout;
 int main()
-{   
-        doTask();
-        return 0;
+{
+    doTask();
+    return 0;
 }
 
 
@@ -53,20 +56,20 @@ void doTask()
 
 
 
-    ProductCollection products; //등록된 전체 상품 리스트. 나중에 코드 수정하기. 
+    ProductCollection products; //등록된 전체 상품 리스트.
+    Client* actor = NULL; //현재 로그인한 사람. 
     Product* selected = NULL; //4.1. 이후 4.2. 선택했을 때 상품 즉시 구매를 위한 포인터
-    Purchaser* actor = NULL;//new Purchaser; //실험. 다시 NULL로 바꾸기. 
-    
+
+
     //아래 주석은 4번대 잘 돌아가는지 보려고 만든 실험용 코드
-    //Product* test = new Product; 
+    //Product* test = new Product;
     //products.addProduct(test);
+    //Client* actor = new Client;
     //제출 전에 반드시 지우기.
 
     while (!is_program_exit)
     {
-
         // 입력파일에서 메뉴 숫자 2개를 읽기
-        //fscanf(in_fp, "%d %d ", &menu_level_1, &menu_level_2);
         fin >> menu_level_1 >> menu_level_2;
 
         // 메뉴 구분 및 해당 연산 수행
@@ -88,8 +91,6 @@ void doTask()
         }
         case 4:
         {
-            
-            
             switch (menu_level_2)
             {
 
@@ -129,7 +130,6 @@ void doTask()
             }
             break; //이거 없으니까 6번으로 넘어가버림 ㅠㅠ
         }
-        //여기에 6번 복붙하면 됨
         case 6:
         {
             switch (menu_level_2)
@@ -143,7 +143,7 @@ void doTask()
             }
             }
             break;
-        }        
+        }
         } //switch 1        
     }
 }
