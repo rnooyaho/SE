@@ -73,7 +73,7 @@ public:
 
 };
 
-//2.2로그아웃 (로그인상태 판별후 로그인 상태일시 로그아웃 
+//2.2로그아웃 (로그인상태 판별후 로그인 상태일시 로그아웃) 
 
 class LogoutUI {
 public:
@@ -88,19 +88,6 @@ public:
 
 };
 
-
-
-
-
-
-/*
-
-class Search {
-	SearchUI* searchUI;
-public:
-	Product* run(ifstream& fin, ProductCollection products, Product*& selected, ofstream& fout);
-	Product* searchProduct(string productName, ProductCollection products);
-};
 
 //boundary class 선언
 class SearchUI {
@@ -125,10 +112,9 @@ public:
 class PurchaseUI {
 	Purchase* purchase;
 public:
-	void startInterface(Product* product, Purchaser* actor, ofstream& fout, Purchase* purchase);
+	void startInterface(Product* product, Client* actor, ofstream& fout, Purchase* purchase);
 	void purchaseProduct();
 };
-
 
 //control class 선언
 class Search {
@@ -140,20 +126,20 @@ public:
 class Purchase {
 	Product* product;
 	PurchaseUI* purchaseUI;
-	Purchaser* actor;
+	Client* actor;
 public:
-	Purchaser* run(Product* product, Purchaser* actor, ofstream& fout);
+	Client* run(Product* product, Client* actor, ofstream& fout);
 	void purchaseProduct();
 };
 class ShowShopping {
 public:
-	void run(Purchaser* actor, ofstream& fout);
+	void run(Client* actor, ofstream& fout);
 };
 
 class SatisfactionScore {
 public:
 
-	void run(ifstream& fin, Purchaser* actor, ofstream& fout);
+	void run(ifstream& fin, Client* actor, ofstream& fout);
 	//void enterScore();
 };
 
@@ -161,4 +147,3 @@ public:
 
 
 
-*/

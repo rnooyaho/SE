@@ -55,7 +55,12 @@ void doTask()
     int menu_level_1 = 0, menu_level_2 = 0;
     int is_program_exit = 0;
 
-    ClientCollection clients;
+    ClientCollection Allclients;
+    ProductCollection products; //등록된 전체 상품 리스트. 나중에 코드 수정하기. 
+    Product* selected = NULL; //4.1. 이후 4.2. 선택했을 때 상품 즉시 구매를 위한 포인터
+    Purchaser* actor = NULL;//new Purchaser; //실험. 다시 NULL로 바꾸기. 
+
+
 
     while (!is_program_exit)
     {
@@ -74,19 +79,21 @@ void doTask()
             case 1:   // "1.1. 회원가입“ 메뉴 부분
             {
                 CreateClientAccount* client = new CreateClientAccount;
-                client->addNewClient(fin, clients, fout);
-
-                //cout << clients.clients[0]->getClientPW();
+                client->addNewClient(fin, Allclients, fout);
+                
+                Allclients.printClient(); // 회원수 출력
                 break;
             }
             case 2:
             {
                 DeleteClientAccount *dclient = new DeleteClientAccount;
-                dclient->deleteClient(fin, clients, fout);
+                dclient->deleteClient(fin, Allclients, fout);
 
+                Allclients.printClient(); // 회원수 출력
                 break;
             }
             }
+            break;
         }
         case 2:
         {
@@ -97,18 +104,61 @@ void doTask()
             case 1: 
             {
                 Login* log = new Login;
-                log->tryLogin(fin, clients, fout); //로그인
+                log->tryLogin(fin, Allclients, fout); //로그인
 
-
+                break;
             }
             case 2:
             {
                 Logout* log_out = new Logout;
-                log_out->tryLogout(clients, fout); //로그아웃
+                log_out->tryLogout(Allclients, fout); //로그아웃
                 break;
             }
             }
             break;
+        }
+        case 4:
+        {
+
+
+            switch (menu_level_2)
+            {
+
+            case 1: // "4.1. 상품 정보 검색" 메뉴 부분 input : 4 1 hat
+            {
+                //cout << "4.1." << endl;
+                Search* search = new Search;
+                selected = search->run(fin, products, selected, fout);
+                delete search;
+                fout << "\n";
+                break;
+            }
+            case 2: // "4.2. 상품 구매" 메뉴 부분 
+            {
+                //cout << "4.2." << endl;
+                Purchase* purchase = new Purchase;
+                actor = purchase->run(selected, actor, fout);
+                fout << "\n";
+                break;
+            }
+            case 3: // "4.3. 상품 구매 내역 조회" 메뉴 부분 
+            {
+                //cout << "4.3." << endl;
+                ShowShopping* showShopping = new ShowShopping;
+                showShopping->run(actor, fout);
+                fout << "\n";
+                break;
+            }
+            case 4: // "4.4. 상품 구매만족도 평가" 메뉴 부분 input : 4 4 hat 3
+            {
+                //cout << "4.4." << endl;
+                SatisfactionScore* satisfactionScore = new SatisfactionScore;
+                satisfactionScore->run(fin, actor, fout);
+                fout << "\n";
+                break;
+            }
+            }
+            break; //이거 없으니까 6번으로 넘어가버림 ㅠㅠ
         }
         case 6:
         {
@@ -118,6 +168,7 @@ void doTask()
             {
                 program_exit();
                 is_program_exit = 1;
+                cout << "종료";
                 //break;
                 return;
             }

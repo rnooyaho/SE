@@ -3,7 +3,7 @@
 #include<algorithm>
 #include "UI.h"
 #include <vector>
-
+#include <algorithm>
 //1.1 인터페이스 출력
 void CreateClientAccountUI::interface(ofstream& fout) {
 	fout << "1.1. 회원가입" << endl;
@@ -25,13 +25,13 @@ Client* CreateClientAccountUI::enterClientInformation(ifstream& fin, ofstream& f
 };
 
 // 1.1 입력받은 정보를 통해 client콜랙션에 회원정보 추가
-void CreateClientAccount::addNewClient(ifstream& fin, ClientCollection&clients, ofstream& fout){
+void CreateClientAccount::addNewClient(ifstream& fin, ClientCollection& ALLclients, ofstream& fout){
 	Client* CCA = new Client; //회원가입할 client객체 생성
 	CCA_UI = new CreateClientAccountUI;
 	CCA_UI->interface(fout); //인터페이스 출력
 	CCA = CCA_UI->enterClientInformation(fin,fout); //입력받은 회원정보 출력
 
-	clients.addClient(CCA);
+	ALLclients.addClient(CCA);
 }
 
 // 1.2 인터페이스 출력
@@ -40,25 +40,23 @@ void DeleteClientAccountUI::interface(ofstream& fout) {
 	fout << "1.2. 회원탈퇴" << endl;
 }
 //1.2 로그인중인 회원아이디 탈퇴 
-void DeleteClientAccountUI::deleteClientAccount(ClientCollection &clients, ofstream& fout) {
+void DeleteClientAccountUI::deleteClientAccount(ClientCollection &ALLclients, ofstream& fout) {
 	
-	int index = clients.findClientIndex(); //로그인 상태의 아이디 검사
+	Client* delete_Client = new Client;
 
-	string ID = clients.clients[index]->getClientID();  //로그아웃한 아이디 저장
+	delete_Client = ALLclients.LoginID(); //로그인중인 회원 객체를 탈퇴하기 위해 불러온다.
 
-	clients.deleteClient(ID); //회원탈퇴
+	fout << "> " << delete_Client->getClientID() << " " << "\n"; // 회원탈퇴할 아이디 출력
 
-
-	fout << "> " << ID << " " << "\n"; // 회원탈퇴 한 아이디 출력
-
+	ALLclients.deleteClient(delete_Client);
 };
 
 // 1.2 client콜랙션에 회원정보 삭제
-void DeleteClientAccount::deleteClient(ifstream& fin, ClientCollection& clients, ofstream& fout) {
+void DeleteClientAccount::deleteClient(ifstream& fin, ClientCollection& ALLclients, ofstream& fout) {
 	
 	DCA_UI = new DeleteClientAccountUI;
 	DCA_UI->interface(fout); //인터페이스 출력
-	DCA_UI->deleteClientAccount(clients, fout); //탈퇴한 회원아이디 출력
+	DCA_UI->deleteClientAccount(ALLclients, fout); //탈퇴한 회원아이디 출력
 
 }
 
@@ -75,7 +73,7 @@ void LoginUI::interface(ofstream& fout) {
 string *LoginUI::selectLogin(ifstream& fin, ofstream& fout) {
 	string ID;
 	string PW;
-	string ID_PW[2];
+	static string ID_PW[2];
 	
 	fin >>  ID >> PW;
 
@@ -88,17 +86,22 @@ string *LoginUI::selectLogin(ifstream& fin, ofstream& fout) {
 };
 
 // 2.1 입력받은 정보를 통해 로그인 시도 
-void Login::tryLogin(ifstream& fin, ClientCollection& clients, ofstream& fout) 
+void Login::tryLogin(ifstream& fin, ClientCollection& ALLclients, ofstream& fout) 
 {
 
 	Login_UI = new LoginUI;
 	Login_UI->interface(fout); //인터페이스 출력
 	//ID,PW값 받기
-	string ID = Login_UI->selectLogin(fin, fout)[0]; 
-	string PW = Login_UI->selectLogin(fin, fout)[1];
 
-	// ID,PW 일치시 로그인후 log_status값 0에서 1로 변경후 접속한 클라이언트 index값 반환(안해도됨)
-	clients.Login(ID, PW);
+	string* PW = Login_UI->selectLogin(fin, fout);
+
+	cout << "Id, PW =" <<  PW[0]<< "  " << PW[1] << endl;
+
+	// ID,PW 일치 하는 계정 log_status값 0에서 1로 변경하기 위해 호출
+	Client* Login_Client = new Client;
+
+	Login_Client = ALLclients.Login(PW[0],PW[1]); //로그인할 아이디 객체
+	Login_Client->set_log(1); // 로그인상태로 변경
 
 }
 
@@ -111,40 +114,27 @@ void LogoutUI::interface(ofstream& fout) {
 
 }
 // 2.2 로그아웃  (로그인 상태인 client의 log_status를 1에서 0으로 바꾼다.
-void LogoutUI::selectLogout(ClientCollection& clients, ofstream& fout) {
+void LogoutUI::selectLogout(ClientCollection& ALLclients, ofstream& fout) {
+	Client* Logout_Client = new Client;
+
+	Logout_Client = ALLclients.LoginID(); //로그인중인 회원 객체 
+	Logout_Client->set_log(0); // 로그인상태로 변경
 	
-	int index = clients.findClientIndex(); //로그인 상태의 아이디 검사
-
-	string ID = clients.clients[index]->getClientID();  //로그아웃한 아이디 저장
-
-	clients.clients[index]->set_log(false); //로그아웃
-
 	
-	fout << "> " << ID  << " " << "\n"; // 로구아웃 한 아이디 출력
+	fout << "> " << Logout_Client->getClientID() << " " << "\n"; // 로구아웃 한 아이디 출력
+
 };
 
 
-// 1.2 client콜랙션에 회원정보 삭제
-void Logout::tryLogout(ClientCollection& clients, ofstream& fout) {
+// 2.2 cl
+void Logout::tryLogout(ClientCollection& ALLclients, ofstream& fout) {
 
 	Logout_UI = new LogoutUI;
 	Logout_UI->interface(fout); //인터페이스 출력
-	Logout_UI->selectLogout(clients, fout); //탈퇴한 회원아이디 출력
+	Logout_UI->selectLogout(ALLclients, fout); //탈퇴한 회원아이디 출력
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-/*
 
 //4.1. 상품 정보 검색 구현
 void SearchUI::startInterface(ifstream& fin, ofstream& fout)
@@ -162,6 +152,7 @@ void SearchUI::enterProductName(Search* search, ProductCollection products, ofst
 	string companyName;
 	int productCost;
 	int quantityLeft;
+	float score;
 
 	this->selected = search->searchProduct(this->productName, products);
 	selected->getProductDetails(sellerID, name, companyName, productCost, quantityLeft);
@@ -195,8 +186,8 @@ Product* Search::searchProduct(string productName, ProductCollection products) /
 출력 예시
 4.2. 상품 구매
 > mbc hat
-
-void PurchaseUI::startInterface(Product* product, Purchaser* actor, ofstream& fout, Purchase* purchase) //4.1.
+*/
+void PurchaseUI::startInterface(Product* product, Client* actor, ofstream& fout, Purchase* purchase) //4.1.
 {
 	this->purchase = purchase;
 	purchaseProduct();
@@ -206,7 +197,7 @@ void PurchaseUI::purchaseProduct() //4.1.1.
 {
 	purchase->purchaseProduct();
 }
-Purchaser* Purchase::run(Product* product, Purchaser* actor, ofstream& fout)
+Client* Purchase::run(Product* product, Client* actor, ofstream& fout)
 {
 	fout << "4.2. 상품 구매\n";
 	this->product = product;
@@ -227,8 +218,8 @@ void Purchase::purchaseProduct()
 출력 예시
 4.3. 상품 구매 내역 조회
 > mbc hat chulsoo 2000 1
-
-void ShowShopping::run(Purchaser* actor, ofstream& fout)
+*/
+void ShowShopping::run(Client* actor, ofstream& fout)
 {
 	ProductCollection list;
 	ShowShoppingListUI UI;
@@ -262,7 +253,7 @@ void ShowShoppingListUI::startInterface(ProductCollection list, ofstream& fout)
 출력 예시
 4.4. 상품 구매 만족도 평가
 > mbc hat 3
-
+*/
 void SatisfactionScoreUI::startInterface(ifstream& fin, string& productName, int& score, ofstream& fout)
 {
 	fout << "4.4. 상품 구매 만족도 평가\n";
@@ -272,7 +263,7 @@ void SatisfactionScoreUI::printScore(string sellerID, string productName, int sc
 {
 	fout << "> " << sellerID << " " << productName << " " << score << "\n";
 }
-void SatisfactionScore::run(ifstream& fin, Purchaser* actor, ofstream& fout)
+void SatisfactionScore::run(ifstream& fin, Client* actor, ofstream& fout)
 {
 	string productName;
 	int score;
@@ -289,4 +280,10 @@ void SatisfactionScore::run(ifstream& fin, Purchaser* actor, ofstream& fout)
 
 }
 
-*/
+
+
+
+
+
+
+
