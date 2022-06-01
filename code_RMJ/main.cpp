@@ -15,6 +15,10 @@ Purchaser클래스를 Client 클래스로 합쳤습니다.
 *memo*
 * 다이어그램 수정하기
 4.4. 구매만족도 커뮤니케이션 다이어그램 수정해야됨
+
+4.1. 검색 할 땐 재고 0인 거 출력 안 하도록 해야되나..?
+4.4. 평균 만족도는 소수점 첫째자리에서 반올림해서 정수.
+
 ************************************/
 #pragma once
 // 헤더 선언
@@ -55,8 +59,8 @@ void doTask()
     int is_program_exit = 0;
 
 
-
-    ProductCollection products; //등록된 전체 상품 리스트.
+    ClientCollection Allclients;
+    ProductCollection totalProducts; //등록된 전체 상품 리스트.
     Client* actor = NULL; //현재 로그인한 사람. 
     Product* selected = NULL; //4.1. 이후 4.2. 선택했을 때 상품 즉시 구매를 위한 포인터
 
@@ -81,13 +85,77 @@ void doTask()
             {
             case 1:   // "1.1. 회원가입“ 메뉴 부분
             {
+                CreateClientAccount* client = new CreateClientAccount;
+                client->addNewClient(fin, Allclients, fout);
+                fout << "\n";
+
+                Allclients.printClient(); // 회원수 출력
                 break;
             }
             case 2:
             {
+                DeleteClientAccount* dclient = new DeleteClientAccount;
+                dclient->deleteClient(fin, Allclients, fout);
+                fout << "\n";
+
+                Allclients.printClient(); // 회원수 출력
                 break;
             }
             }
+            break;
+        }
+        case 2:
+        {
+            switch (menu_level_2)
+            {
+            case 1:
+            {
+                Login* log = new Login;
+                log->tryLogin(fin, Allclients, fout); //로그인
+
+                actor = Allclients.LoginID(); //로그인된 액터 받아오기. 3,4에 꼭 필요
+                fout << "\n";
+                break;
+            }
+            case 2:
+            {
+                Logout* log_out = new Logout;
+                log_out->tryLogout(Allclients, fout); //로그아웃
+
+                fout << "\n";
+                actor = NULL; //로그아웃된 액터 지우기. 
+                break;
+            }
+            }
+            break;
+        }
+        case 3:
+        {
+            switch (menu_level_2)
+            {
+            case 1://3.1 판매 의류 등록
+            {
+                AddProduct* addProduct = new AddProduct;
+                addProduct->run(fin, actor, totalProducts, fout);
+                fout << "\n";
+                break;
+            }
+            case 2://3.2 등록 상품 조회
+            {
+                ProductForSale* productForSale = new ProductForSale;
+                productForSale->run(actor, fout);
+                fout << "\n";
+                break;
+            }
+            case 3://3.3 판매 완료 상품 조회
+            {
+                ListSoldProduct* listSoldProduct = new ListSoldProduct;
+                listSoldProduct->run(actor, fout);
+                fout << "\n";
+                break;
+            }
+            }
+            break;
         }
         case 4:
         {
@@ -97,8 +165,9 @@ void doTask()
             case 1: // "4.1. 상품 정보 검색" 메뉴 부분 input : 4 1 hat
             {
                 //cout << "4.1." << endl;
+                cout << actor->getClientID() << endl;//지우기.
                 Search* search = new Search;
-                selected = search->run(fin, products, selected, fout);
+                selected = search->run(fin, totalProducts, selected, fout);
                 delete search;
                 fout << "\n";
                 break;
@@ -128,7 +197,22 @@ void doTask()
                 break;
             }
             }
-            break; //이거 없으니까 6번으로 넘어가버림 ㅠㅠ
+            break; 
+        }
+        case 5:
+        {
+            switch (menu_level_2)
+            {
+            case 1: //5.1 판매 상품 통계
+            {
+                //cout << "5.1." << endl;
+                ShowStatistic* showStatistic = new ShowStatistic;
+                showStatistic->run(actor, fout);
+                fout << "\n";
+                break;
+            }
+            }
+            break;
         }
         case 6:
         {
@@ -150,6 +234,8 @@ void doTask()
 
 void program_exit()
 {
+    fout << "6.1.종료\n";
+    fout << "\n";
     fin.close();
     fout.close();
 }
