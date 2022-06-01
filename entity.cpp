@@ -20,7 +20,7 @@ string Client::getClientName()
 {
 	return clientName;
 }
-bool Client::getlog()
+bool Client::getlog_status()
 {
 	return log_status;
 }
@@ -36,47 +36,38 @@ void Client::createClient(string& name, string& SSN, string& ID, string& passwor
 	clientID = ID;
 	clientPassword = password;
 }
-void Client::set_log(bool log_status) { //로그인 상태 바꾸는 함수
+void Client::set_log(int log_status) { //로그인 상태 바꾸는 함수
 	this->log_status = log_status;
-
+	if (log_status == 1) {
+		cout << this->clientID << "는 로그인상태로 변경되었습니다." << endl; // 주석 나중에 삭제예정
+	}
+	else if (log_status == 0) {
+		cout << this->clientID << "는 로그아웃상태로 변경되었습니다." << endl; //나중에 삭제
+	};
 }
 
 //collection class 구현
-
-int ClientCollection::Login(string ID, string PW) {
-
-	int i = 0;
-	for (i = 0; i < clients.size(); i++)
-	{
-		if ((clients[i]->getClientID() == ID) && (clients[i] ->getClientPW ()== PW))
-			//아이디 패스워드 일치시 로그인상태로 변경
-		{
-			clients[i]->set_log(true);
-			return i; //로그인 클라이언트 인덱스값 저장
-		}
-
-	}
-	// cout << "로그인에 실패했습니다" ; 나중에 예외처리 할 필요 있을시 출력인자 추가 필요.
-
-};
-
 void ClientCollection::addClient(Client* client)  //회원가입 
 {
 	clients.push_back(client);
 }
-void ClientCollection::deleteClient(string ClientID) //  회원탈퇴
+
+void ClientCollection::deleteClient(Client* client) //  회원탈퇴
+
 {	
-	int index = findClientIndex(ClientID); 
-	clients.erase(clients.begin() + (index-1));
-	// 컬래션클래스명인 clients랑 내부멤버인  clients의 이름이 같아서 나중에 수정하겟습니다.
+	string ClientID = client->getClientID();
+	int index = findClientIndex(ClientID); // 객체 삭제를 위해 인덱스를 찾는 과정
+
+	clients.erase(clients.begin()+ index);  //로그인 중인 아이디의 index를 찾아서 컬랙션 클래스 내에서 삭제
+
 }
 
-void ClientCollection::printClient()  //필요없는 구하면서 확인용으로 작성한 함수
+void ClientCollection::printClient()  //구하면서 확인용으로 작성한 나중에 삭제할 함수
 {
-	
 	//a = clients[0]->getClientID;
-	cout << clients.size() << clients[0]->getClientID() ;
+	cout << "회원수 : " << clients.size() << endl ;
 }
+
 
 int ClientCollection::findClientIndex(string ID)// ID에 일치하는 인덱스 반환
 {
@@ -90,19 +81,36 @@ int ClientCollection::findClientIndex(string ID)// ID에 일치하는 인덱스 반환
 
 	}
 	return i;
+
 }
 
-int ClientCollection::findClientIndex()// 로그인 중인 인덱스 반환
+
+Client* ClientCollection::Login(string ID, string PW)// 로그인 중인 고객 객체 반환
 {
-	int i = 0;
-	for (i = 0; i < clients.size(); ++i)
+	int i = 0; 
+	for (int i = 0; i < clients.size(); ++i)
 	{
-		if (clients[i]->getlog() == true)
+		if ((clients[i]->getClientID() == ID) && (clients[i]->getClientPW() == PW))
 		{
-			return i;                  //로그인중인 아이디 컬랙션클래스에서 찾을수 있도록 인덱스 반환
+			break;//로그인중인 인덱스에서 break
 		}
 
 	}
-	return 0;
+	return clients[i];
 }
+Client* ClientCollection::LoginID()// 로그인 중인 고객 객체 찾아서 반환
+{
+	int i = 0;
+	for (int i = 0; i < clients.size(); ++i)
+	{
+		if (clients[i]->getlog_status() == 1)
+		{
+			break;//로그인중인 인덱스에서 break
+		}
+
+	}
+	return clients[i];
+}
+
+
 
