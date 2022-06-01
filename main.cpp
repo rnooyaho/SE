@@ -56,6 +56,9 @@ void doTask()
     int is_program_exit = 0;
 
     ClientCollection Allclients;
+    ProductCollection products; //등록된 전체 상품 리스트. 나중에 코드 수정하기. 
+    Product* selected = NULL; //4.1. 이후 4.2. 선택했을 때 상품 즉시 구매를 위한 포인터
+    Purchaser* actor = NULL;//new Purchaser; //실험. 다시 NULL로 바꾸기. 
 
 
 
@@ -113,6 +116,49 @@ void doTask()
             }
             }
             break;
+        }
+        case 4:
+        {
+
+
+            switch (menu_level_2)
+            {
+
+            case 1: // "4.1. 상품 정보 검색" 메뉴 부분 input : 4 1 hat
+            {
+                //cout << "4.1." << endl;
+                Search* search = new Search;
+                selected = search->run(fin, products, selected, fout);
+                delete search;
+                fout << "\n";
+                break;
+            }
+            case 2: // "4.2. 상품 구매" 메뉴 부분 
+            {
+                //cout << "4.2." << endl;
+                Purchase* purchase = new Purchase;
+                actor = purchase->run(selected, actor, fout);
+                fout << "\n";
+                break;
+            }
+            case 3: // "4.3. 상품 구매 내역 조회" 메뉴 부분 
+            {
+                //cout << "4.3." << endl;
+                ShowShopping* showShopping = new ShowShopping;
+                showShopping->run(actor, fout);
+                fout << "\n";
+                break;
+            }
+            case 4: // "4.4. 상품 구매만족도 평가" 메뉴 부분 input : 4 4 hat 3
+            {
+                //cout << "4.4." << endl;
+                SatisfactionScore* satisfactionScore = new SatisfactionScore;
+                satisfactionScore->run(fin, actor, fout);
+                fout << "\n";
+                break;
+            }
+            }
+            break; //이거 없으니까 6번으로 넘어가버림 ㅠㅠ
         }
         case 6:
         {
