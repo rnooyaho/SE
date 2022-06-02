@@ -108,7 +108,7 @@ int ClientCollection::findClientIndex(string ID)// ID에 일치하는 인덱스 반환
 Client* ClientCollection::Login(string ID, string PW)// 로그인 중인 고객 객체 반환
 {
 	int i = 0; 
-	for (int i = 0; i < clients.size(); ++i)
+	for (i = 0; i < clients.size(); ++i)
 	{
 		if ((clients[i]->getClientID() == ID) && (clients[i]->getClientPW() == PW))
 		{
@@ -121,7 +121,7 @@ Client* ClientCollection::Login(string ID, string PW)// 로그인 중인 고객 객체 반
 Client* ClientCollection::LoginID()// 로그인 중인 고객 객체 찾아서 반환
 {
 	int i = 0;
-	for (int i = 0; i < clients.size(); ++i)
+	for (i = 0; i < clients.size(); ++i)
 	{
 		if (clients[i]->getlog_status() == 1)
 		{
