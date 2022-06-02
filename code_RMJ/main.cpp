@@ -1,16 +1,10 @@
 /**********************************
-
-0602
-use case 12개 합친 코드
-
-*memo*
-* 다이어그램 수정하기
-
-4.1. 검색 할 땐 재고 0인 거 출력 안 하도록 해야되나..?
-4.4. 평균 만족도는 소수점 첫째자리에서 반올림해서 정수.
-
+소프트웨어 공학 과제 3
+4분반 6조
+B511187 정지환
+B611128 유창조
+B774012 유민지
 ************************************/
-#pragma once
 // 헤더 선언
 #include <iostream>
 #include <fstream>
@@ -20,7 +14,6 @@ use case 12개 합친 코드
 #include "entity.h"
 
 // 상수 선언
-//#define MAX_STRING 32
 #define INPUT_FILE_NAME "input.txt"
 #define OUTPUT_FILE_NAME "output.txt"
 using namespace std;
@@ -34,7 +27,7 @@ void program_exit();
 // 파일 입출력을 위한 파일 포인터 변수 선언.
 ifstream fin(INPUT_FILE_NAME);
 ofstream fout(OUTPUT_FILE_NAME);
-//ofstream fout;
+
 int main()
 {
     doTask();
@@ -53,13 +46,6 @@ void doTask()
     ProductCollection totalProducts; //등록된 전체 상품 리스트.
     Client* actor = NULL; //현재 로그인한 사람. 
     Product* selected = NULL; //4.1. 이후 4.2. 선택했을 때 상품 즉시 구매를 위한 포인터
-
-
-    //아래 주석은 4번대 잘 돌아가는지 보려고 만든 실험용 코드
-    //Product* test = new Product;
-    //products.addProduct(test);
-    //Client* actor = new Client;
-    //제출 전에 반드시 지우기.
 
     while (!is_program_exit)
     {
