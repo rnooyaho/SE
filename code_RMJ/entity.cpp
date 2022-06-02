@@ -45,8 +45,7 @@ void Client::set_log(int log_status) { //로그인 상태 바꾸는 함수
 		cout << this->clientID << "는 로그아웃상태로 변경되었습니다." << endl; //나중에 삭제
 	};
 }
-
-/*Client 클래스 구매 기능 구현*/
+//Client 클래스 구매 기능 구현
 void Client::addPurchaseInformation(Product* product) //구매 상품 리스트 추가
 {
 	purchasedProductList.addProduct(product);
@@ -55,8 +54,7 @@ ProductCollection Client::getPurchasedProductList()
 {
 	return purchasedProductList;
 }
-
-/*Client 클래스 판매 기능*/
+//Client 클래스 판매 기능 구현
 void Client::addSoldProduct(Product* product)
 {
 	soldProductList.addProduct(product);
@@ -66,7 +64,7 @@ ProductCollection Client::getSoldProductList()
 	return soldProductList;
 }
 
-//Client collection class 구현
+//ClientCollection class 구현
 void ClientCollection::addClient(Client* client)  //회원가입 
 {
 	clients.push_back(client);
@@ -131,7 +129,22 @@ Client* ClientCollection::LoginID()// 로그인 중인 고객 객체 찾아서 반환
 	}
 	return clients[i];
 }
+
+
 //Product 클래스 멤버함수 구현
+Product::Product(Client* actor, string productName, string companyName, int cost, int quantityLeft)
+{
+	this->seller = actor;
+
+	this->sellerID = actor->getClientID();
+	this->productName = productName;
+	this->productCompanyName = companyName;
+	this->cost = cost;
+	this->quantityLeft = quantityLeft;
+
+	this->quantitysold = 0;
+	this->averageScore = 0; //정수형
+}
 string Product::getProductName()
 {
 	return productName;
@@ -153,7 +166,7 @@ void Product::stockCorrection() //재고 및 판매량 수정
 void Product::setScore(int score)//평균 구매만족도 계산.
 {
 	int totalScore = (averageScore * (quantitysold - 1)) + score;
-	averageScore = int(totalScore / quantitysold);
+	averageScore = int(round(totalScore / quantitysold));
 }
 string Product::getName()
 {
@@ -162,20 +175,6 @@ string Product::getName()
 string Product::getSellerID()
 {
 	return this->sellerID;
-}
-
-Product::Product(Client* actor, string productName, string companyName, int cost, int quantityLeft)
-{
-	this->seller = actor;
-
-	this->sellerID = actor->getClientID();
-	this->productName = productName;
-	this->productCompanyName = companyName;
-	this->cost = cost;
-	this->quantityLeft = quantityLeft;
-	
-	this->quantitysold = 0;
-	this->averageScore = 0; //정수형
 }
 int Product::getQuantityLeft()
 {
@@ -194,7 +193,7 @@ int Product::getScore()
 	return averageScore;
 }
 
-//product collection class 멤버 함수 구현
+//ProductCollection class 멤버 함수 구현
 Product* ProductCollection::findProduct(string productName)//상품 정보 검색에 이용
 {
 	int i = 0;
@@ -221,8 +220,7 @@ Product* ProductCollection::getProduct(int i) //리스트 순회용
 	return products[i];
 }
 
-
-//오름차순 정렬을 위해 추가.
+//sortList() : 상품 리스트를 상품명 오름차순으로 정렬.
 bool compare(Product* a, Product* b)
 {
 	return a->getName() < b->getName();
