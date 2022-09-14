@@ -9,9 +9,10 @@ class Product;
 class ProductCollection;
 class ClientCollection;
 
+//Product 클래스 선언
 class Product {
 private:
-	string sellerID; //추가
+	string sellerID; 
 	string productName;
 	string productCompanyName;
 	int cost;
@@ -19,42 +20,28 @@ private:
 	int quantitysold;
 	int averageScore;
 
-	//추가
 	Client* seller;
-	//int margin;
+
 
 public:
-	/*
-	Product() { //실험용으로 만든 생성자. push 전에 지우기. 
-		sellerID = "mbc";
-		productName = "hat";
-		productCompanyName = "chulsoo";
-		cost = 2000;
-		quantityLeft = 2;
-		quantitysold = 0;
-		averageScore = 0.0; //구매만족도 초기값은 0. 이것만 남겨두기. 
-	}
-	*/
+
 	Product(Client* actor, string productName, string companyName, int cost, int quantityLeft); //판매 물건 등록
 
 	void getProductDetails(string& ID, string& name, string& companyName, int& productCost, int& left, float& score);
-	string getProductName();//필요해서 추가함
-	string getName(); //새로 추가한 함수. Search에서 필요함.
+	string getProductName();
+	string getName(); 
 	string getSellerID();
 	void setScore(int score);
 	void stockCorrection();
 
-
-	//void createProduct(Client* actor, string productName, string companyName, int cost, int quantityLeft);
 	int getQuantityLeft();
 	int getQuantitySold();
 	int getScore();
 	int calculateProfit();
-	//void getProductCostAndScore();
 
 };
 
-
+//ProductCollection 클래스 선언
 class ProductCollection {
 private:
 	vector<Product*> products;
@@ -64,12 +51,10 @@ public:
 	int getSize();
 	Product* getProduct(int i);
 
-	//추가
-	//void deleteProduct(Product* product);
-	
 	void sortList();
 };
 
+//Client 클래스 선언
 class Client {
 private:
 	string clientName;
@@ -83,17 +68,8 @@ private:
 
 	/*판매 기능에 필요*/
 	ProductCollection soldProductList; //판매 물건
-	//ProductCollection soldOutProductList; //다 팔린 물건들.
 
 public:
-	/*
-	Client() { // 4번대 잘 돌아가는지 보려고 만든 생성자. 
-		clientName = "part";
-		socialSecurityNumber = "123456";
-		clientID = "obs";
-		clientPassword = "pw2d";
-	}
-	*/
 
 	void createClient(string& name, string& SSN, string& ID, string& password);
 	string getClientID();         //어떤 정보 접근할지 몰라서 모든 값들 반환하도록 만들었습니다.
@@ -102,17 +78,17 @@ public:
 	string getClientPW();
 	bool getlog_status();
 	void set_log(int log_status); // 로그인상태를 바꾸는 함수
-	//void deleteClient(); //재고 및 판매량 수정
 
 	/*구매 기능*/
-	void addPurchaseInformation(Product* product); //구매자에서 추가
-	ProductCollection getPurchasedProductList();   //구매자에서 추가
+	void addPurchaseInformation(Product* product); 
+	ProductCollection getPurchasedProductList();   
 
 	/*판매 기능*/
 	void addSoldProduct(Product* product);
 	ProductCollection getSoldProductList();
 };
 
+//ClientCollection 클래스 선언
 class ClientCollection {
 private:
 	vector<Client*> clients;

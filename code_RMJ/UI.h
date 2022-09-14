@@ -100,7 +100,7 @@ class AddProductUI {
 public:
 	void startInterface(ifstream& fin, string& productName, string& companyName, int& cost, int& quantityLeft, ofstream& fout);
 	void printNewProduct(ofstream& fout, Product* product);
-
+	void enterInformation(ifstream& fin, string& productName, string& companyName, int& cost, int& quantityLeft); //추가한 부분
 	//void enterProductInformation(); 
 };
 /*control*/
@@ -195,6 +195,7 @@ public:
 class SatisfactionScoreUI {
 public:
 	void startInterface(ifstream& fin, string& productName, int& score, ofstream& fout);
+	void enterNameAndScore(ifstream& fin, string& productName, int& score); //추가된 부분 
 	void printScore(string sellerID, string productName, int score, ofstream& fout);
 };
 /*control*/
